@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./style.css" rel="stylesheet">
+    <title>Document</title>
+    <script>
+
+        window.onload = function showList(){
+            const productListDiv = document.getElementsByClassName("productList")[0];
+            
+            for(let i = 0 ; i<productList.length ; i++){
+                const productDiv = document.createElement('div')
+                const p = document.createElement("p");
+                const button = document.createElement("button");
+                button.setAttribute('name', i);
+                button.onclick = (function(e){
+                    add(e.target.name);
+                })
+                button.innerHTML = "add";
+                p.innerHTML = `${productList[i].productName}  ${productList[i].price} `;
+
+                productDiv.appendChild(p);
+                productDiv.appendChild(button);
+
+                productListDiv.appendChild(productDiv);
+            }
+
+        }
+
+        let productList = [
+            {
+               "productName" : "밀키스",
+               "price": 700,
+            },
+            {
+                "productName"  : "초코송이",
+                "price": 700,
+            },
+            {
+                "productName"  : "우유",
+                "price": 1000,
+            },
+            {
+                "productName"  : "바나나",
+                "price": 4000,
+            }
+        ];
+        let myBag = [];
+
+
+        const add = (index) => {
+            if(myBag.length == 0 ){
+                productList[index].stock = 1;
+                myBag.push(productList[index]);
+                showMybag();
+            }else{
+                const checkBag = myBag.find((bag) => bag == productList[index]);
+                if(!checkBag){
+                    productList[index].stock = 1;
+                    myBag.push(productList[index]);
+                    showMybag();
+                }else{
+                    bagIndex = myBag.indexOf(checkBag);
+                    const stock = myBag[bagIndex].stock += 1;
+                    updateBag(bagIndex, stock);
+                }
+            }
+            console.log(myBag);
+            
+        }
+
+        const showMybag = () => {
+            const bagListDiv = document.getElementsByClassName("myBagList")[0];
+            
+            for(let i = myBag.length-1 ; i< myBag.length ; i++){
+                const bagDiv = document.createElement('div')
+                const wishP = document.createElement("p");
+                wishP.setAttribute("class","wishDiv");
+                const button = document.createElement("button");
+                button.setAttribute('name', i);
+                button.onclick = (function(e){
+                    deleteProduct(e.target.name);
+                })
+                button.innerHTML = "delete";
+                wishP.innerHTML = `${myBag[i].productName}  ${myBag[i].price}  (${myBag[i].stock})`;
+
+                bagDiv.appendChild(wishP);
+                bagDiv.appendChild(button);
+
+                bagListDiv.appendChild(bagDiv);
+
+            }
+
+            showPrice();
+
+        }
+
+        const showPrice = () => {
+            const myPriceDiv = document.getElementsByClassName('myPrice')[0];
+            let myPrice = 0;
+            console.log(myBag.length);
+            if(myBag.length > 0){
+                for(let i=0;i<myBag.length;i++){
+                myPrice += myBag[i].price * myBag[i].stock;
+                myPriceDiv.innerHTML =  `${myPrice}원`;
+                }
+            }else{
+                myPriceDiv.innerHTML =  `0원`;
+            }
+            
+        }
+
+        const deleteProduct = (index) => {
+            if(myBag[index].stock > 1){
+                const stock = myBag[index].stock -= 1;
+                updateBag(index,stock);
+            }else{
+                myBag.splice(index,1);
+                document.getElementsByClassName("wishDiv")[index].remove();
+                document.getElementsByName(`${index}`)[1].remove();
+                showPrice();
+            }
+            
+        }
+
+        const updateBag = (index, stock) => {
+            const bagP = document.getElementsByClassName("wishDiv")[index];
+            bagP.innerHTML =  `${myBag[index].productName}  ${myBag[index].price}  (${stock})`;
+            showPrice();
+        }
+        
+        const pay = () => {
+            let payPrice = document.getElementById('payInput').value;
+            let allPrice = 0;
+            myBag.forEach((bag) => (
+                allPrice += bag.price*bag.stock
+            ));
+
+            console.log(allPrice);
+            if(payPrice == ''){
+                alert('돈주세요 돈돈!');
+            }else if(allPrice > payPrice){
+                alert(`${allPrice - payPrice} 원이 부족합니다 ㅠㅠ`);
+            }else if(allPrice < payPrice){
+                alert(`${payPrice - allPrice}원 거스름돈 입니다!`);
+                location.reload();
+            }else if(allPrice == payPrice){
+                alert('계산완료 ! 감사합니다ㅎㅎ');
+                location.reload();
+            }
+        }
+
+
+    </script>
+</head>
+<body>
+        <div class="market">
+        <div class="productList">
+            <div class="title">
+                <h3>제품리스트</h3>
+            </div>
+        </div>
+        <div class="myBagList">
+            <div class="title">
+                <h3>장바구니 리스트</h3>
+            </div>
+        </div>
+        </div>
+        <div class="price">
+            <span>총합계 : </span> 
+            <div class="myPrice">
+                0원
+             </div>
+        </div>
+        <div class="pay">
+            <input type="text" placeholder="결제금액 투입!" id="payInput">
+            <button onclick="pay()" >결제하기</button>
+        </div>
+</body>
+</html>

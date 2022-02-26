@@ -1,0 +1,86 @@
+body{
+    font-family: 'Open Sans', sans-serif;
+}
+
+.market{
+    display: flex;
+    justify-content: space-evenly;
+}
+.productList, .myBagList{
+    width: 40%;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+.productList {
+    background-color: #f9f6f6;
+}
+
+.myBagList{
+    background-color: #f2ece1;
+}
+
+.productList div{
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #ddd;
+}
+
+.myBagList div{
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #ba9658;
+}
+
+.productList button{
+    border: none;
+    height: 32px;
+    width: 40px;
+    align-self: center;
+    border-radius: 5px;
+    background-color: #afaeae;
+    color: #fff;
+    cursor: pointer;
+}
+
+.myBagList button{
+    border: none;
+    height: 32px;
+    width: 50px;
+    align-self: center;
+    border-radius: 5px;
+    background-color: #930c0c;
+    color: #fff;
+    cursor: pointer;
+}
+.price{
+    padding: 32px;
+    display: flex;
+    justify-content: end;
+    margin-right: 57px;
+    font-size: x-large;
+}
+
+.pay{
+    padding: 32px;
+    display: flex;
+    justify-content: center;
+}
+
+.pay input[type="text"]{
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-right: 8px;
+}
+
+.pay button{
+    border: none;
+    height: 36px;
+    width: 63px;
+    align-self: center;
+    border-radius: 5px;
+    background-color: #183b82;
+    color: #fff;
+    cursor: pointer;
+}
