@@ -78,8 +78,9 @@
             for(let i = myBag.length-1 ; i< myBag.length ; i++){
                 const bagDiv = document.createElement('div')
                 const wishP = document.createElement("p");
-                wishP.setAttribute("class","wishDiv");
+                wishP.setAttribute("class",`wishDiv_${i}`);
                 const button = document.createElement("button");
+                button.setAttribute('class', i);
                 button.setAttribute('name', i);
                 button.onclick = (function(e){
                     deleteProduct(e.target.name);
@@ -104,8 +105,10 @@
             console.log(myBag.length);
             if(myBag.length > 0){
                 for(let i=0;i<myBag.length;i++){
-                myPrice += myBag[i].price * myBag[i].stock;
-                myPriceDiv.innerHTML =  `${myPrice}원`;
+                    if(myBag[i]){
+                        myPrice += myBag[i].price * myBag[i].stock;
+                        myPriceDiv.innerHTML =  `${myPrice}원`;
+                    }
                 }
             }else{
                 myPriceDiv.innerHTML =  `0원`;
@@ -118,16 +121,18 @@
                 const stock = myBag[index].stock -= 1;
                 updateBag(index,stock);
             }else{
-                myBag.splice(index,1);
-                document.getElementsByClassName("wishDiv")[index].remove();
-                document.getElementsByName(`${index}`)[1].remove();
+                delete myBag[index];
+                console.log(myBag);
+                console.log(index);
+                document.getElementsByClassName(`${index}`)[0].remove();
+                document.getElementsByClassName(`wishDiv_${index}`)[0].remove();
                 showPrice();
             }
             
         }
 
         const updateBag = (index, stock) => {
-            const bagP = document.getElementsByClassName("wishDiv")[index];
+            const bagP = document.getElementsByClassName(`wishDiv_${index}`)[0];
             bagP.innerHTML =  `${myBag[index].productName}  ${myBag[index].price}  (${stock})`;
             showPrice();
         }
@@ -135,9 +140,11 @@
         const pay = () => {
             let payPrice = document.getElementById('payInput').value;
             let allPrice = 0;
-            myBag.forEach((bag) => (
-                allPrice += bag.price*bag.stock
-            ));
+            myBag.forEach((bag) => {
+                if(!bag){
+                    allPrice += bag.price*bag.stock
+                }
+            });
 
             console.log(allPrice);
             if(payPrice == ''){
